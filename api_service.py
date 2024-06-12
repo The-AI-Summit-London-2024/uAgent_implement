@@ -32,6 +32,29 @@ async def make_agent_call(req: TestRequest):
         return f"successful call - agent response: {res}"
     except Exception:
         return "unsuccessful agent call"
+
+context = ""
+
+@app.post("/chat")
+async def chat(req: TestRequest):
+    global context
+    try:
+        # Perform the agent query
+        res = await agent_query(req)
+        
+        # Update the context with the new response
+        context += f"\n{res}"
+        
+        return {"Current response": res, "context": context}
+    except Exception as e:
+        return {"response": "unsuccessful agent call", "error": str(e)}
+    
+@app.post("/reset")
+async def reset():
+    global context
+    context = ""
+    return {"response": "context has been reset"}
+        
     
 origins = ["*"]
 app.add_middleware(
