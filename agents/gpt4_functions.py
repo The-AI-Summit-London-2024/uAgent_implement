@@ -1,8 +1,12 @@
 # API interface with open ai
-
+import openai
+import logging
 from openai import OpenAI
 from dotenv import load_dotenv
 import os
+
+openai._utils._logs.logger.setLevel(logging.WARNING)
+openai._utils._logs.httpx_logger.setLevel(logging.WARNING)
 
 # Test openAI connection
 
@@ -114,6 +118,10 @@ def prompt_gpt4(client, assistant, prompt):
   )
 
   messages = list(client.beta.threads.messages.list(thread_id=thread.id, run_id=run.id))
+
+  if len(messages) == 0:
+      print("No messages in thread.")
+      return
 
   message_content = messages[0].content[0].text
   annotations = message_content.annotations
