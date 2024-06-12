@@ -16,7 +16,8 @@ router = APIRouter()
 
 @app.get("/")
 def read_root():
-    agent_query()
+    req = "Hello, agent!"
+    agent_query(req)
     return {"Hello": "World"}
 
 async def agent_query(req):
