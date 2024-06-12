@@ -45,7 +45,7 @@ async def call_gpt4(ctx: Context, sender: str, _query: FilePathRequest):
 	response, citations = gf.prompt_gpt4(client, assistant, prompt)
 
 	ctx.logger.info(f"Received message from {response}")
-	ctx.logger.info(f"Received message from {citations}")
+	# ctx.logger.info(f"Received message from {citations}")
 
 	# Clean up files if needed
 	# gf.clear_all_files(client)

@@ -38,7 +38,7 @@ async def call_gpt4(ctx: Context):
     message_file = gf.upload_file(client, assistant, filepaths)
     response, citations = gf.prompt_gpt4(client, assistant, prompt)
     print(response)
-    print(citations)
+    # print(citations)
 
 
 if __name__ == "__main__":
