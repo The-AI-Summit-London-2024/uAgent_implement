@@ -129,18 +129,18 @@ def prompt_gpt4(client, assistant, prompt):
 
 	messages = list(client.beta.threads.messages.list(thread_id=thread.id, run_id=run.id))
 
-  if len(messages) == 0:
-      print("No messages in thread.")
-      return
+	if len(messages) == 0:
+		print("No messages in thread.")
+		return
 
-  message_content = messages[0].content[0].text
-  annotations = message_content.annotations
-  citations = []
-  for index, annotation in enumerate(annotations):
-      message_content.value = message_content.value.replace(annotation.text, f"[{index}]")
-      if file_citation := getattr(annotation, "file_citation", None):
-          cited_file = client.files.retrieve(file_citation.file_id)
-          citations.append(f"[{index}] {cited_file.filename}")
+	message_content = messages[0].content[0].text
+	annotations = message_content.annotations
+	citations = []
+	for index, annotation in enumerate(annotations):
+		message_content.value = message_content.value.replace(annotation.text, f"[{index}]")
+		if file_citation := getattr(annotation, "file_citation", None):
+			cited_file = client.files.retrieve(file_citation.file_id)
+			citations.append(f"[{index}] {cited_file.filename}")
 
 	# print(message_content.value)
 	# print("\n".join(citations))

@@ -44,6 +44,8 @@ async def upload_file(request: FileRequest):
 
         file_path = os.path.join(os.path.dirname(__file__), '..', 'agents/files', file_name)
 
+        os.makedirs(os.path.dirname(file_path), exist_ok=True)
+
         with open(file_path, "wb") as f:
             f.write(file_data)
         
