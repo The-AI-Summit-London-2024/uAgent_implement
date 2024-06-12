@@ -38,7 +38,8 @@ async def call_gpt4(ctx: Context, sender: str, _query: TestRequest):
 	name = "Insurance Paralegal"
 	assistant_desc = "You are an expert paralegal analyst. Use your knowledge base to answer questions about the provided pension insurance documents."
 
-	client, assistant = gf.create_assistant(name, assistant_desc, 'gpt-4o')
+	client = gf.create_client()
+	assistant = gf.create_assistant(client, name, assistant_desc, 'gpt-4o')
 	prompt = """
 	Summarize the provided document in 3 sentences, as if you would to an insurance attorney who is familiar with insurance related legal terms.
 	Then provide 3 to 10 key bullet points that capture the most critical rules.
