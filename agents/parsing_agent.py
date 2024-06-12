@@ -1,40 +1,30 @@
 from uagents import Agent, Context, Model
 import gpt4_functions as gf
-import os
 
-# TODO: Too much logging happening, figure out how to tune it down
-
-import logging
-
-httpx_logger = logging.getLogger("httpx")
-httpx_logger.setLevel(logging.WARNING)
-
-class TestRequest(Model):
-    message: str
+class FilePathRequest(Model):
+    file_path: str
 
 class Response(Model):
     text: str
 
-class Message(Model):
-	message: str
-
 # Initialize agent
 gpt4agent = Agent(
 	name="gpt4agent",
-	port=8001,
-	seed="gpt4agent secret phrase",
-	endpoint=["http://127.0.0.1:8001/submit"],
+	port=8002,
+	seed="gpt4agent",
+    endpoint="http://localhost:8002/submit",
 )
 
 # Introduce agent
 @gpt4agent.on_event("startup")
-async def introduce_agent(ctx: Context):
-	ctx.logger.error(f"Hello, I'm agent {gpt4agent.name} and my address is {gpt4agent.address}.")
+async def startup(ctx: Context):
+    ctx.logger.info(f"Starting up {gpt4agent.name}")
+    ctx.logger.info(f"With address: {gpt4agent.address}")
 
 # Run all required logic on startup
-@gpt4agent.on_query(model=TestRequest, replies={Response})
-async def call_gpt4(ctx: Context, sender: str, _query: TestRequest):
-
+@gpt4agent.on_query(model=FilePathRequest, replies={Response})
+async def call_gpt4(ctx: Context, sender: str, _query: FilePathRequest):
+	ctx.logger.info(f"Received message from {sender}: {_query.file_path}")
 	name = "Insurance Paralegal"
 	assistant_desc = "You are an expert paralegal analyst. Use your knowledge base to answer questions about the provided pension insurance documents."
 
@@ -60,20 +50,11 @@ async def call_gpt4(ctx: Context, sender: str, _query: TestRequest):
 
 	# Store response in json
 	ctx.storage.set("summary", response+"\n"+citations)
-	
-# Send delta calories to grocery agent
-
-# RECIPIENT_ADDRESS = (
-# 	"groceryagent://agent1qt27mhu8js84x7zh30sxegf0m5va2gxtk3sqns4ptvrutzv8l0kuke9qq43"
-# )
-
-# @gpt4agent.on_interval(period=60.0)
-# async def send_message(ctx: Context):
-# 	# ctx.logger.info(f"Sending message to {RECIPIENT_ADDRESS}")
-# 	# await ctx.send(RECIPIENT_ADDRESS, Message(message="Hello there testagent."))
-	
-# 	delta = ctx.storage.get("delta")
-# 	await ctx.send(RECIPIENT_ADDRESS, Message(message=str(delta)))
+    
+	try:
+		await ctx.send(sender, Response(text="success"))
+	except Exception:
+		await ctx.send(sender, Response(text="fail"))
 
 if __name__ == "__main__":
 	gpt4agent.run()

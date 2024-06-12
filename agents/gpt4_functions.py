@@ -96,7 +96,7 @@ def upload_file(client, assistant, filepaths):
 
 	return message_file
 
-message_file = upload_file(client, assistant, filepaths)
+# message_file = upload_file(client, assistant, filepaths)
 
 # Prompt a question regarding the last file uploaded
 
@@ -147,10 +147,10 @@ def prompt_gpt4(client, assistant, prompt):
 
 	return message_content.value, "\n".join(citations)
 
-response, citations = prompt_gpt4(client, assistant, prompt)
+# response, citations = prompt_gpt4(client, assistant, prompt)
 
-print(response)
-print(citations)
+# print(response)
+# print(citations)
 
 # Optional: clear all files from a specified client (does not clear other clients)
 
