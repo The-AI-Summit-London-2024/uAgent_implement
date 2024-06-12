@@ -1,6 +1,8 @@
-from uagents import Agent, Bureau, Context
-from models.models import Message
+from uagents import Agent, Bureau, Context,Model
 from data_mapping_agent import mapping
+
+class Message(Model):
+    message: str
 
 
 AGENT_MAPPING_ADDRESS="agent1qfw0krjhp8dcrtee7kfy6xtrpmumrq4dj7vfmlx5zz4hjex872vkqsg02vc"
@@ -10,7 +12,7 @@ parsing = Agent(
     seed="documents parsing",
 )
  
-@parsing.on_interval(period=5.0)
+@parsing.on_interval(period=300.0)
 async def send_message(ctx: Context):
     await ctx.send(AGENT_MAPPING_ADDRESS, Message(message="Hello there bob."))
 
