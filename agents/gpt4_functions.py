@@ -63,8 +63,6 @@ prompt = """
 
 # Upload a file
 
-filepaths = ["agents/IBP_Problemstatement.docx"]
-
 def upload_file(client, assistant, filepaths):
 
 	# Create a vector store caled "Insurance Statements"
@@ -91,7 +89,7 @@ def upload_file(client, assistant, filepaths):
 
 	# Upload the user provided file to OpenAI
 	message_file = client.files.create(
-		file=open("agents/IBP_Problemstatement.docx", "rb"), purpose="assistants"
+		file=open(filepaths[0], "rb"), purpose="assistants"
 	)
 
 	return message_file
