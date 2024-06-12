@@ -23,7 +23,7 @@ def generate_random_string(length=5):
     return ''.join(random.choices(string.ascii_letters + string.digits, k=length))
 
 async def agent_query(file_name,destination):
-    response = await query(destination=destination, message=FilePathRequest(file_path=file_name), timeout=15.0)
+    response = await query(destination=destination, message=FilePathRequest(file_path=file_name), timeout=30.0)
     data = json.loads(response.decode_payload())
     return data["text"]
 
@@ -49,7 +49,14 @@ async def upload_file(request: FileRequest):
         with open(file_path, "wb") as f:
             f.write(file_data)
         
-        await agent_query(os.path.join('files/',file_name),AGENT_ADDRESS)
+        try:
+            res = await agent_query(os.path.join('files/',file_name),AGENT_ADDRESS)
+        
+            return {"response": res}
+        except Exception as e:
+            return {"response": "unsuccessful agent call", "error": str(e)}
+    
+        
 
         return {"detail": f"File saved as {file_path}"}
     except Exception as e:

@@ -55,7 +55,7 @@ async def call_gpt4(ctx: Context, sender: str, _query: FilePathRequest):
 	#ctx.storage.set("summary", response+"\n"+citations)
     
 	try:
-		await ctx.send(sender, Response(text=response))
+		await ctx.send(sender, Response(text=str(response)))
 	except Exception:
 		await ctx.send(sender, Response(text="fail"))
 
