@@ -51,13 +51,15 @@ prompt = """
 
 # Upload file and prompt a question
 
-def upload_file(client, assistant):
+filepaths = ["IBP_Problemstatement.docx"]
+
+def upload_file(client, assistant, filepaths):
 
   # Create a vector store caled "Insurance Statements"
   vector_store = client.beta.vector_stores.create(name="Insurance Statements")
   
   # Ready the files for upload to OpenAI
-  file_paths = ["IBP_Problemstatement.docx"]
+  file_paths = filepaths
   file_streams = [open(path, "rb") for path in file_paths]
   
   # Use the upload and poll SDK helper to upload the files, add them to the vector store,
@@ -82,7 +84,7 @@ def upload_file(client, assistant):
 
   return message_file
 
-message_file = upload_file(client, assistant)
+message_file = upload_file(client, assistant, filepaths)
 
 def prompt_gpt4(client, assistant, prompt):
 
