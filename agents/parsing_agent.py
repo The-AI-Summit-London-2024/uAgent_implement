@@ -9,6 +9,12 @@ import logging
 httpx_logger = logging.getLogger("httpx")
 httpx_logger.setLevel(logging.WARNING)
 
+class TestRequest(Model):
+    message: str
+
+class Response(Model):
+    text: str
+
 class Message(Model):
 	message: str
 
@@ -21,12 +27,13 @@ gpt4agent = Agent(
 )
 
 # Introduce agent
+@gpt4agent.on_event("startup")
 async def introduce_agent(ctx: Context):
 	ctx.logger.error(f"Hello, I'm agent {gpt4agent.name} and my address is {gpt4agent.address}.")
 
 # Run all required logic on startup
-@gpt4agent.on_event("startup")
-async def call_gpt4(ctx: Context):
+@gpt4agent.on_query(model=TestRequest, replies={Response})
+async def call_gpt4(ctx: Context, sender: str, _query: TestRequest):
 
 	name = "Insurance Paralegal"
 	assistant_desc = "You are an expert paralegal analyst. Use your knowledge base to answer questions about the provided pension insurance documents."
