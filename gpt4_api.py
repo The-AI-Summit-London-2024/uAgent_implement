@@ -89,6 +89,6 @@ for index, annotation in enumerate(annotations):
         cited_file = client.files.retrieve(file_citation.file_id)
         citations.append(f"[{index}] {cited_file.filename}")
 
-# print(message_content.value)
-# print("\n".join(citations))
+print(message_content.value)
+print("\n".join(citations))
 
