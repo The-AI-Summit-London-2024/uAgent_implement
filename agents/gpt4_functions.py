@@ -1,8 +1,12 @@
 # API interface with open ai
-
+import openai
+import logging
 from openai import OpenAI
 from dotenv import load_dotenv
 import os
+
+openai._utils._logs.logger.setLevel(logging.WARNING)
+openai._utils._logs.httpx_logger.setLevel(logging.WARNING)
 
 # Test openAI connection
 
@@ -51,13 +55,15 @@ prompt = """
 
 # Upload file and prompt a question
 
-def upload_file(client, assistant):
+filepaths = ["IBP_Problemstatement.docx"]
+
+def upload_file(client, assistant, filepaths):
 
   # Create a vector store caled "Insurance Statements"
   vector_store = client.beta.vector_stores.create(name="Insurance Statements")
   
   # Ready the files for upload to OpenAI
-  file_paths = ["IBP_Problemstatement.docx"]
+  file_paths = filepaths
   file_streams = [open(path, "rb") for path in file_paths]
   
   # Use the upload and poll SDK helper to upload the files, add them to the vector store,
@@ -82,7 +88,7 @@ def upload_file(client, assistant):
 
   return message_file
 
-message_file = upload_file(client, assistant)
+message_file = upload_file(client, assistant, filepaths)
 
 def prompt_gpt4(client, assistant, prompt):
 
@@ -112,6 +118,10 @@ def prompt_gpt4(client, assistant, prompt):
   )
 
   messages = list(client.beta.threads.messages.list(thread_id=thread.id, run_id=run.id))
+
+  if len(messages) == 0:
+      print("No messages in thread.")
+      return
 
   message_content = messages[0].content[0].text
   annotations = message_content.annotations
