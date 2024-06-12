@@ -1,17 +1,37 @@
 from fastapi import FastAPI, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
-import uvicorn
-import os
-import subprocess
+from uagents import Model
+from uagents.query import query
 
+import uvicorn
+import json
+
+class TestRequest(Model):
+    message: str
+    
+AGENT_ADDRESS="agent1qt6ehs6kqdgtrsduuzslqnrzwkrcn3z0cfvwsdj22s27kvatrxu8sy3vag0"
 
 app = FastAPI()
 router = APIRouter()
 
 @app.get("/")
 def read_root():
+    agent_query()
     return {"Hello": "World"}
 
+async def agent_query(req):
+    response = await query(destination=AGENT_ADDRESS, message=req, timeout=15.0)
+    data = json.loads(response.decode_payload())
+    return data["text"]
+
+@app.post("/endpoint")
+async def make_agent_call(req: TestRequest):
+    try:
+        res = await agent_query(req)
+        return f"successful call - agent response: {res}"
+    except Exception:
+        return "unsuccessful agent call"
+    
 origins = ["*"]
 app.add_middleware(
     CORSMiddleware,
@@ -20,17 +40,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-@app.on_event("startup")
-async def startup_event():
-    # Determine the base directory for the project
-    base_dir = os.path.dirname(os.path.abspath(__file__))
-    print(base_dir)
-    # Construct paths to the agent scripts
-    start_agent_path = os.path.join(base_dir, "agents", "doc_parsing_agent.py")
-
-    # Start the dietagent
-    subprocess.Popen(["python", start_agent_path])
 
 # app.include_router(user_router.router)
 # app.include_router(features_router.router)
