@@ -6,7 +6,7 @@ class Message(Model):
 
 # Initialize agent
 gpt4agent = Agent(
-	name="gpt4agent",
+	name="questionsagent",
 	port=8001,
 	seed="gpt4agent secret phrase",
 	endpoint=["http://127.0.0.1:8001/submit"],
@@ -18,12 +18,13 @@ async def introduce_agent(ctx: Context):
 
 # Run all required logic on startup
 @gpt4agent.on_event("startup")
-async def initialize_gpt4(ctx: Context):
+async def call_gpt4(ctx: Context):
 	
     name = "Insurance Paralegal"
     assistant_desc = "You are an expert paralegal analyst. Use your knowledge base to answer questions about the provided pension insurance documents."
 	
-    client, assistant = gf.create_assistant(name, assistant_desc, 'gpt-4o')
+    client = gf.create_client()
+    assistant = gf.create_assistant(client, name, assistant_desc, 'gpt-4o')
     # # TODO: Take in individual member's information as input (json format)
     # indiv_info = indiv_input
 
@@ -38,8 +39,7 @@ async def initialize_gpt4(ctx: Context):
 
     print(prompt)
 
-    response, citations = gf.upload_file_prompt(client, assistant, prompt)
-
+    response, citations = gf.prompt_gpt4(client, assistant, prompt)
     print(response)
     print(citations)
 	

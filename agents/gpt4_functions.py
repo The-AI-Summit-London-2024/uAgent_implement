@@ -63,7 +63,7 @@ prompt = """
 
 # Upload a file
 
-filepaths = ["IBP_Problemstatement.docx"]
+filepaths = ["agents/IBP_Problemstatement.docx"]
 
 def upload_file(client, assistant, filepaths):
 
@@ -91,7 +91,7 @@ def upload_file(client, assistant, filepaths):
 
 	# Upload the user provided file to OpenAI
 	message_file = client.files.create(
-		file=open("IBP_Problemstatement.docx", "rb"), purpose="assistants"
+		file=open("agents/IBP_Problemstatement.docx", "rb"), purpose="assistants"
 	)
 
 	return message_file
@@ -104,6 +104,7 @@ def prompt_gpt4(client, assistant, prompt):
 
 	# Retrieve the list of files already uploaded and get the ID of the latest file
 	files_list = client.files.list()
+	print(files_list.data)
 	latest_file_id = files_list.data[-1].id  # Get the ID of the last uploaded file
 
 	# Create a thread and attach the latest uploaded file to the message
