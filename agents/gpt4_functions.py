@@ -35,7 +35,7 @@ def create_client():
 
 	return client
 
-client = create_client()
+# client = create_client()
 
 # Create assistant (an instance of a chat box)
 
@@ -53,7 +53,7 @@ def create_assistant(client, assistant_name, assistant_desc, gpt_model):
 
 	return assistant
 
-assistant = create_assistant(client, name, assistant_desc, 'gpt-4o')
+# assistant = create_assistant(client, name, assistant_desc, 'gpt-4o')
 
 prompt = """
 		Summarize the provided document in 3 sentences, as if you would to an insurance attorney who is familiar with insurance related legal terms.
@@ -157,35 +157,35 @@ def prompt_gpt4(client, assistant, prompt):
 def clear_all_files(client):
 
 	try:
-			# Retrieve a list of all files
-			files = client.files.list()
+		# Retrieve a list of all files
+		files = client.files.list()
 
-			# Loop through the list of files and delete each one
-			for file in files.data:
-					# Delete the file using its ID
-					client.files.delete(file_id=file.id)
-					print(f"Deleted file with ID: {file.id}")
+		# Loop through the list of files and delete each one
+		for file in files.data:
+			# Delete the file using its ID
+			client.files.delete(file_id=file.id)
+			print(f"Deleted file with ID: {file.id}")
 
-			print("All files have been deleted.")
+		print("All files have been deleted.")
 
 	except Exception as e:
-			print(f"An error occurred: {e}")
+		print(f"An error occurred: {e}")
 
 def clear_all_vector_stores(client):
-		try:
-				# Retrieve a list of all vector stores
-				vector_stores = client.beta.vector_stores.list()
+	try:
+		# Retrieve a list of all vector stores
+		vector_stores = client.beta.vector_stores.list()
 
-				# Loop through the list of vector stores and delete each one
-				for vector_store in vector_stores.data:
-						# Delete the vector store using its ID
-						client.beta.vector_stores.delete(vector_store_id=vector_store.id)
-						print(f"Deleted vector store with ID: {vector_store.id}")
+		# Loop through the list of vector stores and delete each one
+		for vector_store in vector_stores.data:
+			# Delete the vector store using its ID
+			client.beta.vector_stores.delete(vector_store_id=vector_store.id)
+			print(f"Deleted vector store with ID: {vector_store.id}")
 
-				print("All vector stores have been deleted.")
+		print("All vector stores have been deleted.")
 
-		except Exception as e:
-				print(f"An error occurred: {e}")
+	except Exception as e:
+		print(f"An error occurred: {e}")
 
-clear_all_files(client)
-clear_all_vector_stores(client)
+# clear_all_files(client)
+# clear_all_vector_stores(client)

@@ -24,7 +24,9 @@ async def startup(ctx: Context):
 # Run all required logic on startup
 @gpt4agent.on_query(model=FilePathRequest, replies={Response})
 async def call_gpt4(ctx: Context, sender: str, _query: FilePathRequest):
-	ctx.logger.info(f"Received message from {sender}: {_query.file_path}")
+	
+	# ctx.logger.info(f"Received message from {sender}: {_query.file_path}")
+	
 	name = "Insurance Paralegal"
 	assistant_desc = "You are an expert paralegal analyst. Use your knowledge base to answer questions about the provided pension insurance documents."
 
@@ -38,7 +40,7 @@ async def call_gpt4(ctx: Context, sender: str, _query: FilePathRequest):
 
 	filepaths = ["IBP_Problemstatement.docx"]
 
-	# message_file = gf.upload_file(client, assistant, filepaths)	# comment this out after uploading file
+	message_file = gf.upload_file(client, assistant, filepaths)	# comment this out after uploading file
 	response, citations = gf.prompt_gpt4(client, assistant, prompt)
 
 	print(response)
