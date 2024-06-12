@@ -54,6 +54,29 @@ async def reset():
     global context
     context = ""
     return {"response": "context has been reset"}
+
+# It takes a filepath as input and call agent to analyze the file with file path as parameter
+@app.post("/analyze")
+async def analyze(req: TestRequest):
+    try:
+        # Perform the agent query
+        res = await agent_query(req)
+        
+        return {"response": res}
+    except Exception as e:
+        return {"response": "unsuccessful agent call", "error": str(e)}
+    
+#  It takes a query as input and call agent to analyze the query
+@app.post("/query")
+async def query(req: TestRequest):
+    try:
+        # Perform the agent query
+        res = await agent_query(req)
+        
+        return {"response": res}
+    except Exception as e:
+        return {"response": "unsuccessful agent call", "error": str(e)}
+
         
     
 origins = ["*"]
