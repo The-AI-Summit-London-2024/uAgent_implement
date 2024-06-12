@@ -24,10 +24,11 @@ async def startup(ctx: Context):
 async def query_handler(ctx: Context, sender: str, _query: TestRequest):
     ctx.logger.info("Query received")
     try:
-        # do something here
-        await ctx.send(sender, Response(text="success"))
-    except Exception:
-        await ctx.send(sender, Response(text="fail"))
+        # Prepare the response text to include the received query
+        response_text = f"success - message received: {_query.message}"
+        await ctx.send(sender, Response(text=response_text))
+    except Exception as e:
+        await ctx.send(sender, Response(text=f"fail - {str(e)}"))
 
 
 if __name__ == "__main__":
