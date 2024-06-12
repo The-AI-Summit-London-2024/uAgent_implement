@@ -43,11 +43,15 @@ def create_assistant(assistant_name, assistant_desc, gpt_model):
   return client, assistant
 
 client, assistant = create_assistant(name, assistant_desc, 'gpt-4o')
-prompt = "Summarize the document in 3 sentences"
+prompt = """
+    Summarize the provided document in 3 sentences, as if you would to an insurance attorney who is familiar with insurance related legal terms.
+    Then provide 3 to 10 key bullet points that capture the most critical rules.
+    Use only the latest provided document as your ground truth. Ignore all previous documents.
+"""
 
 # Upload file and prompt a question
 
-def upload_file_prompt(client, assistant, prompt):
+def upload_file(client, assistant):
 
   # Create a vector store caled "Insurance Statements"
   vector_store = client.beta.vector_stores.create(name="Insurance Statements")
@@ -63,8 +67,8 @@ def upload_file_prompt(client, assistant, prompt):
   )
   
   # You can print the status and the file counts of the batch to see the result of this operation.
-  print(file_batch.status)
-  print(file_batch.file_counts)
+  # print(file_batch.status)
+  # print(file_batch.file_counts)
 
   assistant = client.beta.assistants.update(
     assistant_id=assistant.id,
@@ -75,23 +79,33 @@ def upload_file_prompt(client, assistant, prompt):
   message_file = client.files.create(
     file=open("IBP_Problemstatement.docx", "rb"), purpose="assistants"
   )
- 
-  # Create a thread and attach the file to the message
+
+  return message_file
+
+message_file = upload_file(client, assistant)
+
+def prompt_gpt4(client, assistant, prompt):
+
+  # Retrieve the list of files already uploaded and get the ID of the latest file
+  files_list = client.files.list()
+  latest_file_id = files_list.data[-1].id  # Get the ID of the last uploaded file
+
+  # Create a thread and attach the latest uploaded file to the message
   thread = client.beta.threads.create(
     messages=[
       {
         "role": "user",
         "content": prompt,
-        # Attach the new file to the message.
+        # Attach the latest uploaded file to the message
         "attachments": [
-          { "file_id": message_file.id, "tools": [{"type": "file_search"}] }
+          {"file_id": latest_file_id, "tools": [{"type": "file_search"}]}
         ],
       }
     ]
   )
  
   # The thread now has a vector store with that file in its tool resources.
-  print(thread.tool_resources.file_search)
+  # print(thread.tool_resources.file_search)
 
   run = client.beta.threads.runs.create_and_poll(
       thread_id=thread.id, assistant_id=assistant.id
@@ -113,12 +127,10 @@ def upload_file_prompt(client, assistant, prompt):
 
   return message_content.value, "\n".join(citations)
 
-response, citations = upload_file_prompt(client, assistant, prompt)
+response, citations = prompt_gpt4(client, assistant, prompt)
 
 print(response)
 print(citations)
-
-# Optional: list all threads
 
 # Optional: clear all files from all threads
 
@@ -155,5 +167,5 @@ def clear_all_vector_stores(client):
     except Exception as e:
         print(f"An error occurred: {e}")
 
-# clear_all_files()
-# clear_all_vector_stores()
+# clear_all_files(client)
+#clear_all_vector_stores(client)

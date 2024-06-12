@@ -1,6 +1,10 @@
 from uagents import Agent, Context, Model
 import gpt4_functions as gf
 
+# TODO: Too much logging happening, figure out how to tune it down
+
+import logging
+
 class Message(Model):
 	message: str
 
@@ -14,22 +18,34 @@ gpt4agent = Agent(
 
 # Introduce agent
 async def introduce_agent(ctx: Context):
-    ctx.logger.info(f"Hello, I'm agent {gpt4agent.name} and my address is {gpt4agent.address}.")
+	ctx.logger.error(f"Hello, I'm agent {gpt4agent.name} and my address is {gpt4agent.address}.")
 
 # Run all required logic on startup
 @gpt4agent.on_event("startup")
-async def initialize_gpt4(ctx: Context):
-	
-    name = "Insurance Paralegal"
-    assistant_desc = "You are an expert paralegal analyst. Use your knowledge base to answer questions about the provided pension insurance documents."
-	
-    client, assistant = gf.create_assistant(name, assistant_desc, 'gpt-4o')
-    prompt = "Summarize the document in 3 sentences"
+async def call_gpt4(ctx: Context):
 
-    response, citations = gf.upload_file_prompt(client, assistant, prompt)
+	name = "Insurance Paralegal"
+	assistant_desc = "You are an expert paralegal analyst. Use your knowledge base to answer questions about the provided pension insurance documents."
+	
+	client, assistant = gf.create_assistant(name, assistant_desc, 'gpt-4o')
+	prompt = """
+	Summarize the provided document in 3 sentences, as if you would to an insurance attorney who is familiar with insurance related legal terms.
+	Then provide 3 to 10 key bullet points that capture the most critical rules.
+	Use only the latest provided document as your ground truth. Ignore all previous documents.
+	"""
 
-    print(response)
-    print(citations)
+	# message_file = gf.upload_file(client, assistant)	# comment this out
+	response, citations = gf.prompt_gpt4(client, assistant, prompt)
+
+	print(response)
+	print(citations)
+
+	# Clean up files if needed
+	# gf.clear_all_files(client)
+	# gf.clear_all_vector_stores(client)
+
+	# Store response in json
+	ctx.storage.set("summary", response+"\n"+citations)
 	
 # Send delta calories to grocery agent
 
