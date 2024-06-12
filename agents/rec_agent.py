@@ -26,7 +26,7 @@ async def call_gpt4(ctx: Context):
     client = gf.create_client()
     assistant = gf.create_assistant(client, name, assistant_desc, 'gpt-4o')
 
-    # # TODO: Take in individual member's information as input (json format)
+    # TODO: Take in individual member's information as input (json format)
     indiv_input ="""
         {
             "member_id": 2752,
@@ -44,7 +44,7 @@ async def call_gpt4(ctx: Context):
             "children_dob": ["2010-01-01", "2012-01-01"],
         }
     """
-
+    # TODO: Take in questions from qna_agent output
     questions = [
         {
             "question": "What is the frequency and mode of pension payment for the member?",
@@ -119,6 +119,7 @@ async def call_gpt4(ctx: Context):
         }
     ]
 
+    # TODO: User selects a question to answer
     selected_qsn_idx = 4
     question = questions[selected_qsn_idx]['question']
     relevant_sections = questions[selected_qsn_idx]['relevant_sections']
@@ -138,19 +139,6 @@ async def call_gpt4(ctx: Context):
     print(response)
     print(citations)
 	
-# Send delta calories to grocery agent
-
-# RECIPIENT_ADDRESS = (
-# 	"groceryagent://agent1qt27mhu8js84x7zh30sxegf0m5va2gxtk3sqns4ptvrutzv8l0kuke9qq43"
-# )
-
-# @gpt4agent.on_interval(period=60.0)
-# async def send_message(ctx: Context):
-# 	# ctx.logger.info(f"Sending message to {RECIPIENT_ADDRESS}")
-# 	# await ctx.send(RECIPIENT_ADDRESS, Message(message="Hello there testagent."))
-	
-# 	delta = ctx.storage.get("delta")
-# 	await ctx.send(RECIPIENT_ADDRESS, Message(message=str(delta)))
 
 if __name__ == "__main__":
 	gpt4agent.run()
