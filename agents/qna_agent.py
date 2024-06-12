@@ -38,7 +38,8 @@ async def call_gpt4(ctx: Context):
     Indicate which sections in the document are relevant to each question, in json format. For example: {json_output_format}"
 
     print(prompt)
-
+    filepaths = ["agents/IBP_Problemstatement.docx"]
+    message_file = gf.upload_file(client, assistant, filepaths)
     response, citations = gf.prompt_gpt4(client, assistant, prompt)
     print(response)
     print(citations)
