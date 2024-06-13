@@ -1,6 +1,5 @@
 fastapi==0.68.1
 openai==1.33.0
-SessionStorage
 
 fastapi
 requests
