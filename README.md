@@ -11,8 +11,8 @@ Frontend: nodeJS
 Backend: python, uAgents, FastAPI
 AI services: GPT-4o
 
-
-![](images/archi_diagram.png?raw=true)
+Architecture Diagram:
+![Architecture Diagram](images/archi_diagram.jpeg?raw=true)
 
 ## Instructions to run the project
 
