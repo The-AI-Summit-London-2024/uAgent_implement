@@ -2,7 +2,7 @@ from fastapi import FastAPI, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 from uagents import Model
 from uagents.query import query
-from router import main
+from router import parsing
 
 import json,uvicorn
 
@@ -88,7 +88,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(main.router)
+app.include_router(parsing.router)
 
 if __name__ == "__main__":
     config = uvicorn.Config("api_service:app", host='0.0.0.0', port=5000, log_level="info")
