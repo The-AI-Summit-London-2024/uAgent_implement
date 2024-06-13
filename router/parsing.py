@@ -51,7 +51,6 @@ async def upload_file(request: FileRequest):
         
         try:
             res = await agent_query(os.path.join('files/',file_name),AGENT_ADDRESS)
-        
             return {"response": res,"file_path":os.path.join('files/',file_name)}
         except Exception as e:
             return {"response": "unsuccessful agent call", "error": str(e)} 

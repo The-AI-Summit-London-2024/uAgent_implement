@@ -19,7 +19,10 @@ async def introduce_agent(ctx: Context):
 # Run all required logic on startup
 @gpt4agent.on_event("startup")
 async def call_gpt4(ctx: Context):
-	
+    ctx.logger.info(f"Starting up {gpt4agent.name}")
+    ctx.logger.info(f"With address: {gpt4agent.address}")
+    ctx.logger.info(f"And wallet address: {gpt4agent.wallet.address()}")
+
     name = "Insurance Paralegal"
     assistant_desc = "You are an expert paralegal analyst. Use your knowledge base to answer questions about the provided pension insurance documents."
 	
