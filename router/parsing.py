@@ -5,10 +5,10 @@ from uagents.query import query
 
 import base64,random,string,json,os
 
-class FileRequest(BaseModel):
+class APIRequest(BaseModel):
     file_data: str
 
-class FilePathRequest(Model):
+class AgentRequest(Model):
     file_path: str
     
 #AGENT_ADDRESS="agent1qt6ehs6kqdgtrsduuzslqnrzwkrcn3z0cfvwsdj22s27kvatrxu8sy3vag0"
@@ -29,7 +29,7 @@ async def agent_query(file_name,destination):
 
 
 @router.post("/upload")
-async def upload_file(request: FileRequest):
+async def upload_file(request: APIRequest):
     try:
         file_data = base64.b64decode(request.file_data.split(",")[1])
         
