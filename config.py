@@ -1,0 +1,5 @@
+
+AGENT_PARSING_ADDRESS = "agent1q2axfz2wcpxpgyj0nva8g0cvuw87al0y6v6krhxedmzxlwnhadcdzvw5m0v"
+CLIENT_AGENT = "agent1qtxq4d4vqv3m2kqw53lr57c3sahxsee5sdc0ekh096pdx22yz5ngk5l8c6y"
+CLIENT_INFO_RECEIVER_AGENT = "agent1q0uzg40wh68fnugm2sqpr0aqzx3fq737htmteprjs32m4t2ex6qegzyed9k"
+QNA_AGNET = "agent1qwmvnv67zt8085q56k4ws6wpjx60ctkc7928c2mx2nzp7qn87wkpxweetee"
