@@ -1,13 +1,10 @@
 from uagents import Agent, Context, Model
 
-
 class TestRequest(Model):
     message: str
 
-
 class Response(Model):
     text: str
-
 
 agent = Agent(
     name="your_agent_name_here",
@@ -15,7 +12,6 @@ agent = Agent(
     port=8001,
     endpoint="http://localhost:8001/submit",
 )
-
 
 @agent.on_event("startup")
 async def startup(ctx: Context):
