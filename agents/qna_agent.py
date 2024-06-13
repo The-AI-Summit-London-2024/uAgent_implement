@@ -4,21 +4,32 @@ import gpt4_functions as gf
 class Message(Model):
 	message: str
 
+class AgentRequest(Model):
+    file_path: str
+
+class Response(Model):
+    text: str
+
 # Initialize agent
-gpt4agent = Agent(
+qna_agent = Agent(
 	name="questionsagent",
 	port=8001,
-	seed="gpt4agent secret phrase",
+	seed="qna_agent secret phrase",
 	endpoint=["http://127.0.0.1:8001/submit"],
 )
 
 # Introduce agent
 async def introduce_agent(ctx: Context):
-    ctx.logger.info(f"Hello, I'm agent {gpt4agent.name} and my address is {gpt4agent.address}.")
+    ctx.logger.info(f"Hello, I'm agent {qna_agent.name} and my address is {qna_agent.address}.")
+
+@qna_agent.on_event("startup")
+async def startup(ctx: Context):
+    ctx.logger.info(f"With address: {qna_agent.address}")
+
 
 # Run all required logic on startup
-@gpt4agent.on_event("startup")
-async def call_gpt4(ctx: Context):
+@qna_agent.on_query(model=AgentRequest, replies={Response})
+async def call_gpt4(ctx: Context, sender: str, _query: AgentRequest):
 	
     name = "Insurance Paralegal"
     assistant_desc = "You are an expert paralegal analyst. Use your knowledge base to answer questions about the provided pension insurance documents."
@@ -34,12 +45,16 @@ async def call_gpt4(ctx: Context):
     Indicate which sections in the document are relevant to each question, in json format. For example: {json_output_format}"
 
     print(prompt)
-    filepaths = ["agents/IBP_Problemstatement.docx"]
-    message_file = gf.upload_file(client, assistant, filepaths)
-    response, citations = gf.prompt_gpt4(client, assistant, prompt)
+    filepaths = [f"agents/{_query.file_path}"]
+    gf.upload_file(client, assistant, filepaths)
+    response, _ = gf.prompt_gpt4(client, assistant, prompt)
     print(response)
-    # print(citations)
+
+    try:
+        await ctx.send(sender, Response(text=str(response)))
+    except Exception:
+        await ctx.send(sender, Response(text="fail"))
 
 
 if __name__ == "__main__":
-	gpt4agent.run()
+	qna_agent.run()

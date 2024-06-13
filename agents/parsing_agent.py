@@ -1,7 +1,7 @@
 from uagents import Agent, Context, Model
 import gpt4_functions as gf
 
-class FilePathRequest(Model):
+class AgentRequest(Model):
     file_path: str
 
 class Response(Model):
@@ -22,8 +22,8 @@ async def startup(ctx: Context):
     ctx.logger.info(f"With address: {gpt4agent.address}")
 
 # Run all required logic on startup
-@gpt4agent.on_query(model=FilePathRequest, replies={Response})
-async def call_gpt4(ctx: Context, sender: str, _query: FilePathRequest):
+@gpt4agent.on_query(model=AgentRequest, replies={Response})
+async def call_gpt4(ctx: Context, sender: str, _query: AgentRequest):
 	
 	ctx.logger.info(f"Received message from {sender}: {_query.file_path}")
 	
