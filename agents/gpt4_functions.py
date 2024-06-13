@@ -153,7 +153,7 @@ def prompt_gpt4(client, assistant, prompt):
 
 # Optional: clear all files from a specified client (does not clear other clients)
 
-def clear_all_files(client):
+async def clear_all_files(client):
 
 	try:
 		# Retrieve a list of all files

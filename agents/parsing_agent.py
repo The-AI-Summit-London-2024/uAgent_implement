@@ -31,7 +31,6 @@ async def call_gpt4(ctx: Context, sender: str, _query: FilePathRequest):
 	assistant_desc = "You are an expert paralegal analyst. Use your knowledge base to answer questions about the provided pension insurance documents."
 
 	client = gf.create_client()
-	gf.clear_all_files(client)
 	assistant = gf.create_assistant(client, name, assistant_desc, 'gpt-4o')
 	prompt = """
 	Summarize the provided document in 3 sentences, as if you would to an insurance attorney who is familiar with insurance related legal terms.
@@ -42,17 +41,11 @@ async def call_gpt4(ctx: Context, sender: str, _query: FilePathRequest):
 	filepaths = [f"agents/{_query.file_path}"]
 
 	gf.upload_file(client, assistant, filepaths)	# comment this out after uploading file
-	response, citations = gf.prompt_gpt4(client, assistant, prompt)
+	response, _ = gf.prompt_gpt4(client, assistant, prompt)
 
-	ctx.logger.info(f"Received message from {response}")
-	# ctx.logger.info(f"Received message from {citations}")
+	ctx.logger.info(f"GTP4 Response: {response}")
 
-	# Clean up files if needed
-	# gf.clear_all_files(client)
-	# gf.clear_all_vector_stores(client)
-
-	# Store response in json
-	#ctx.storage.set("summary", response+"\n"+citations)
+	gf.clear_all_files(client)
     
 	try:
 		await ctx.send(sender, Response(text=str(response)))

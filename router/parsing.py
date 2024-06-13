@@ -15,15 +15,15 @@ class FilePathRequest(Model):
 AGENT_ADDRESS="agent1qwhr37xcn5gawtm5wdu7tqw8zypcxvf6y78p89su9cthysav3kjj7ud9823" # parsing_agent
 
 router = APIRouter(
-    prefix="/main",
-    tags=["main"],
+    prefix="/parsing",
+    tags=["parsing"],
 )
 
 def generate_random_string(length=5):
     return ''.join(random.choices(string.ascii_letters + string.digits, k=length))
 
 async def agent_query(file_name,destination):
-    response = await query(destination=destination, message=FilePathRequest(file_path=file_name), timeout=30.0)
+    response = await query(destination=destination, message=FilePathRequest(file_path=file_name), timeout=40.0)
     data = json.loads(response.decode_payload())
     return data["text"]
 
@@ -52,12 +52,9 @@ async def upload_file(request: FileRequest):
         try:
             res = await agent_query(os.path.join('files/',file_name),AGENT_ADDRESS)
         
-            return {"response": res}
+            return {"response": res,"file_path":os.path.join('files/',file_name)}
         except Exception as e:
-            return {"response": "unsuccessful agent call", "error": str(e)}
-    
-        
+            return {"response": "unsuccessful agent call", "error": str(e)} 
 
-        return {"detail": f"File saved as {file_path}"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
