@@ -11,6 +11,8 @@ class TestRequest(Model):
     
 AGENT_ADDRESS="agent1qt6ehs6kqdgtrsduuzslqnrzwkrcn3z0cfvwsdj22s27kvatrxu8sy3vag0"
 
+GPT_AGENT_ADDRESS="gpt3"
+
 app = FastAPI()
 router = APIRouter()
 
@@ -20,15 +22,15 @@ def read_root():
     agent_query(req)
     return {"Hello": "World"}
 
-async def agent_query(req):
-    response = await query(destination=AGENT_ADDRESS, message=req, timeout=15.0)
+async def agent_query(req,add):
+    response = await query(destination=add, message=req, timeout=15.0)
     data = json.loads(response.decode_payload())
     return data["text"]
 
 @app.post("/endpoint")
 async def make_agent_call(req: TestRequest):
     try:
-        res = await agent_query(req)
+        res = await agent_query(req,AGENT_ADDRESS)
         return f"successful call - agent response: {res}"
     except Exception:
         return "unsuccessful agent call"
@@ -40,7 +42,7 @@ async def chat(req: TestRequest):
     global context
     try:
         # Perform the agent query
-        res = await agent_query(req)
+        res = await agent_query(req,GPT_AGENT_ADDRESS)
         
         # Update the context with the new response
         context += f"\n{res}"
@@ -60,7 +62,7 @@ async def reset():
 async def analyze(req: TestRequest):
     try:
         # Perform the agent query
-        res = await agent_query(req)
+        res = await agent_query(req,GPT_AGENT_ADDRESS)
         
         return {"response": res}
     except Exception as e:
@@ -71,7 +73,7 @@ async def analyze(req: TestRequest):
 async def query(req: TestRequest):
     try:
         # Perform the agent query
-        res = await agent_query(req)
+        res = await agent_query(req,GPT_AGENT_ADDRESS)
         
         return {"response": res}
     except Exception as e:
