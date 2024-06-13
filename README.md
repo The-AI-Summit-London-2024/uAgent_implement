@@ -48,8 +48,7 @@ Answers a question in the context of given user data (E.g an individual's age, g
 - Run `python agents/rec_agent.py`
 
 ## Combining all Agents
-<Insert run instructions here>
-
+- Run `python api_service.py`
 
 ## TODOs
 [NOTE]: The Recommendation agent has not been integrated into the combined app yet.
