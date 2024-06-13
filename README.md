@@ -27,9 +27,10 @@ To access each agent, run the following command:
 Create an OpenAI account and generate your own API key from https://platform.openai.com/api-keys
 You will need to add funds to your account to use GPT4o.
 
-Create a .env file in the main directory and add your OpenAI API key:
+Create a `.env` file in the main directory and add your OpenAI API key:
+```
 OPENAI_API_KEY = 'INSERT_KEY_HERE'
-
+```
 
 ## Individual Agents
 ### Parsing agent
