@@ -11,11 +11,14 @@ Frontend: nodeJS
 Backend: python, uAgents, FastAPI
 AI services: GPT-4o
 
+
+![](images/archi_diagram.png?raw=true)
+
 ## Instructions to run the project
 
 ### Env setup
 
-Install packages:
+In a Python virtual env, install packages:
 `pip install -r requirements.txt`
 
 To access each agent, run the following command:
@@ -28,7 +31,7 @@ Create a .env file in the main directory and add your OpenAI API key:
 OPENAI_API_KEY = 'INSERT_KEY_HERE'
 
 
-## Use cases
+## Individual Agents
 ### Parsing agent
 Parses document and provides a document summary:
 - Run `python agents/parsing_agent.py`
@@ -41,7 +44,15 @@ Generates 10 suggested questions that users might have about the document:
 Answers a question in the context of given user data:
 - Run `python agents/rec_agent.py`
 
+## Combining all Agents
+<Insert run instructions here>
 
 
-## Special considerations, if any
-<TODO>
+## TODOs
+[NOTE]: The Recommendation agent has not been integrated into the combined app yet.
+
+1. Full agent-to-agent integration
+2. Final report output (PRT scheme) to meet key customer requirements
+3. Host service on cloud
+4. Integration with AgentVerse
+5. Accuracy testing with more datasets and SMEs
