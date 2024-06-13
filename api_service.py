@@ -13,6 +13,8 @@ AGENT_ADDRESS="agent1qt6ehs6kqdgtrsduuzslqnrzwkrcn3z0cfvwsdj22s27kvatrxu8sy3vag0
 
 GPT_AGENT_ADDRESS="agent1qwmvnv67zt8085q56k4ws6wpjx60ctkc7928c2mx2nzp7qn87wkpxweetee"
 
+
+
 app = FastAPI()
 router = APIRouter()
 
